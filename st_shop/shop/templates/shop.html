@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row" style="margin-bottom: 50px; margin-top: 50px">
+<div class="col-md-6 offset-md-3">
+    <h3 class="text-center">Адреса магазинов</h3>
+    <hr>
+    {% for shop in shop %}
+
+        <strong>{{shop.name}}</strong><br>
+        {{shop.address}}<br>
+        {{shop.phone}}<br>
+    <hr>
+    <br>
+        {% endfor %}
+    <br>
+
+</div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,262 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Shop Homepage - Start Bootstrap Template</title>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+</head>
+<style>
+    body {
+      padding-top: 56px;
+    }
+</style>
+<body class="d-flex flex-column min-vh-100">
+
+  <!-- Navigation -->
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+
+        <a class="navbar-brand" href="{% url 'base' %}">
+            <img src="/media/logo.jpg" width="40" height="40"  alt="">
+            Оптовые продажи аксессуаров для телефонов | ST-SHOP</a>
+
+
+
+
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav">
+            {% if not request.user.is_authenticated %}
+          <li>
+            <a class="nav-link text-white" href="{% url 'login' %}">Авторизация</a>
+          </li>
+            <li>
+            <a class="nav-link text-white" href="{% url 'registration' %}">Регистрация</a>
+          </li>
+          {% else %}
+              <li class="nav-item">
+                  <span class="navbar-text text-light">Здравствуйте, {% if request.user.is_authenticated %}<span class="badge badge-success"><a href="#" style="text-decoration: none; font-size: 14px;">{{ request.user.username }}</a></span>{% else %} гоcть!{% endif %}<a href="{% url 'logout' %}">| Выйти</a></span>
+              </li>
+          {% endif %}
+          </ul>
+
+
+
+
+          <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'cart' %}">Корзина <span class="badge badge-pill badge-danger">{{ cart.products.count }}</span></a>
+          </li>
+        </ul>
+
+
+      </div>
+    </div>
+  </nav>
+
+
+
+<!-- 2-ой бар -->
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
+<div class="container">
+
+    <ul class="navbar-nav mr-auto">
+     <li class="nav-item active">
+        <a class="nav-link" href="{% url 'howtoorder' %}">Условия заказа и доставки</a>
+    </li>
+      </ul>
+
+
+      <ul class="navbar-nav mr-auto">
+     <li class="nav-item active">
+        <a class="nav-link" href="{% url 'howtopay' %}">Оплата</a>
+    </li>
+      </ul>
+
+
+
+
+  <ul class="navbar-nav mr-auto">
+     <li class="nav-item active">
+        <a class="nav-link" href="{% url 'shop' %}">Контакты и адреса</a>
+    </li>
+      </ul>
+
+<ul class="navbar-nav mr-auto">
+     <li class="nav-item active">
+    <div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Категории товаров
+  </button>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      {% for category in categories %}
+    <a href="{{ category.get_absolute_url }}" class="list-group-item">{{ category.name }}</a>
+          {% endfor %}
+  </div>
+</div>
+</li>
+      </ul>
+
+    <ul class="navbar-nav mr-auto">
+     <li class="nav-item active">
+        <a class="nav-link" href="{% url 'review' %}">Обратная связь</a>
+    </li>
+      </ul>
+
+ </div>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="container">
+    <div class="row">
+        <div class="col-lg-3 mt-5" style="background-color: #DCDCDC;">
+        <br>
+
+    <div class="page-header">
+    <h6 class="text-center">
+    Категории товаров
+    </h6>
+        </div>
+    <hr>
+        <div class="list-group">
+
+          {% for category in categories %}
+          <a href="{{ category.get_absolute_url }}" class="list-group-item">{{ category.name }} ({{ category.product_set.count }})</a>
+          {% endfor %}
+        <br>
+        </div>
+
+          {% block productfilter %}
+          {% endblock productfilter %}
+
+      </div>
+      <!-- /.col-lg-3 -->
+
+      <div class="col-lg-9">
+        {% block content %}
+        {% if messages %}
+            {% for message in messages %}
+              <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                <strong>{{ message }}</strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+            {% endfor %}
+        {% endif %}
+
+
+
+
+
+
+
+
+        <div class="row mt-5">
+          {% for product in products %}
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100">
+              <a href="{{ product.get_absolute_url }}"><img class="card-img-top" src="{{ product.image.url }}" alt=""></a>
+              <div class="card-body">
+                <h4 class="card-title">
+                  <a href="{{ product.get_absolute_url }}">{{ product.title }}</a>
+                </h4>
+                <h5>{{ product.price }} руб.</h5>
+                <a href="{% url 'add_to_cart' slug=product.slug %}">
+                  <button class="btn btn-danger">Добавить в корзину</button>
+                </a>
+              </div>
+            </div>
+          </div>
+
+
+
+          {% endfor %}
+        </div>
+
+
+<div class="container">
+    {% block pagination %}
+        {% include 'pagination.html' %}
+    {% endblock %}
+</div>
+
+
+                  <!-- /.row -->
+      {% endblock content %}
+      </div>
+      <!-- /.col-lg-9 -->
+
+    </div>
+    <!-- /.row -->
+
+  </div>
+  <!-- /.container -->
+
+
+
+
+
+
+
+  <!-- Footer -->
+
+
+  <div class="wrapper flex-grow-1">
+  <footer class="py-5 bg-dark">
+
+    <div class="container">
+
+
+        <div class="row">
+
+            <div class="col-md-3 col-sm-12 text-white">
+                Интернет-магазин ST-SHOP, работаем с 10.00 до 22.00,
+                ИП Иванов И.И. Свидетельство о регистрации
+                №190948441 выдано 27.12.2007 г. Мингорисполкомом.
+            </div>
+
+             <div class="col-md-3 col-sm-12 text-white">
+                {% for shop in shop %}
+                {{shop.name}}
+                {{shop.address}}<br>
+                {{shop.phone}}<br>
+                 {% endfor %}
+            </div>
+
+            <div class="col-md-3 col-sm-12 text-white">
+                  {% for category in categories %}
+                        <a href="{{ category.get_absolute_url }}" >{{ category.name }}</a>
+                         <br>
+                  {% endfor %}
+            </div>
+             <div class="col-md-3 col-sm-12 text-white">
+                  Обратная связь
+            </div>
+        </div>
+    </div>
+
+    <!-- /.container -->
+  </footer>
+</div>
+  <!-- Bootstrap core JavaScript -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+</body>
+
+</html>

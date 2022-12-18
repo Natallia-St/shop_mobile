@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+    <br>
+    <br>
+
+
+
+    <h4 class="text-center">Как заказать.</h4>
+    <hr>
+    {% for info in info %}
+
+
+        {{info.describe_order|linebreaksbr}}<br>
+
+
+    <br>
+        {% endfor %}
+    <br>
+
+    <h4 class="text-center">Условия доставки.</h4>
+    <hr>
+    {% for info in info %}
+
+
+
+
+        {{info.describe_delivery|linebreaksbr}}<br>
+
+
+    <br>
+        {% endfor %}
+    <br>
+<h6 class="text-center">Позвоните нам, если у вас остались вопросы по заказу или доставке товара.</h6>
+    <hr>
+    {% for shop in shop %}
+    {{shop.name}}, тел: {{shop.phone}}
+    <br>
+        {% endfor %}
+    <br>
+
+
+
+
+{% endblock %}

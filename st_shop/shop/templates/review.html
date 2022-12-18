@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row" style="margin-bottom: 50px; margin-top: 50px">
+<div class="col-md-10 offset-md-3">
+    <h6 class="text-center text-warning">Здравствуйте. У вас возникли вопросы? Мы с удовольствием ответим!</h6>
+    <h4 class="text-center"> Отправьте нам сообщение.</h4>
+    <hr>
+    <form action="{% url 'review' %}" method="POST">
+        {% csrf_token %}
+    <div class="form-group">
+        Краткое название сообщения:
+        <br>
+        {{form.title}}
+    </div>
+    <div class="form-group">
+        Наименование Организации/Имя и Фамилия:
+        {{form.name_user}}
+    </div>
+        <div class="form-group">
+        Номер телефона:
+        {{form.phone}}
+    </div>
+        <div class="form-group">
+        Электронный адрес:
+        {{form.email}}
+    </div>
+
+        <div class="form-group">
+        Текст сообщения:
+        {{form.describe}}
+    </div>
+
+        <input type="submit" class="btn btn-success btn-block" value="Отправить">
+
+
+    </form>
+</div>
+
+</div>
+{% endblock %}

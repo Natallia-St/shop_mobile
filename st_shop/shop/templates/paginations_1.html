@@ -1,0 +1,28 @@
+{% load static %}
+
+<nav id="pagination" class="col align-self-center" aria-label="Page navigation example">
+    <ul class="pagination">
+
+{% if category_products.has_other_pages %}
+       {% if category_products.has_previous %}
+        <li class="page-item"><a class="page-link" href="?page={{ category_products.previous_page_number }}">&laquo;</a></li>
+    {% else %}
+    <li class="page-item disabled"><span class="page-link" href="#" tabindex="-1" aria-disabled="true">&laquo;</span></li>
+    {% endif %}
+    {% for i in category_products.paginator.page_range %}
+        {% if i > category_products.number|add:-4 and i < category_products.number|add:4 %}
+            {% if category_products.number == i %}
+                <li class="page-item active" aria-current="page"><a class="page-link" href="#">{{ i }} <span class="sr-only">(current)</span></a></li>
+            {% else %}
+                <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+    {% if category_products.has_next %}
+        <li class="page-item"><a class="page-link" href="?page={{ category_products.next_page_number }}">&raquo;</a></li>
+    {% else %}
+    <li class="page-item disabled"><span class="page-link" href="#" tabindex="-1" aria-disabled="true">&raquo;</span></li>
+    {% endif %}
+{% endif %}
+    </ul>
+</nav>
